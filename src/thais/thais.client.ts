@@ -132,7 +132,7 @@ export class ThaisClient {
         return this.get<Room[]>('/api/partner/hotel/rooms', undefined, true);
     }
 
-    async getAvailabilities(params: {
+    async getAvailability(params: {
         checkIn: string;
         checkOut: string;
         adults: number;
