@@ -1,0 +1,39 @@
+{
+  "name": "mcp-thais",
+  "version": "1.0.0",
+  "description": "MCP Server professionnel pour l'API Thaïs",
+  "main": "build/index.js",
+  "type": "module",
+  "bin": {
+    "mcp-thais": "./build/index.js"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "tsc && chmod 755 build/index.js",
+    "dev": "tsx watch src/index.ts",
+    "start": "node build/index.js",
+    "test": "vitest run",
+    "test:api": "tsx tests/integration/thais-client.test.ts",
+    "test:dates": "tsx tests/unit/date-parser.test.ts",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf build"
+  },
+  "keywords": ["mcp", "thais", "hotel", "booking", "ai", "chatbot", "xeko"],
+  "author": "Seyyid-Aassuf MAMADOU",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "axios": "^1.13.4",
+    "dotenv": "^17.2.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}
