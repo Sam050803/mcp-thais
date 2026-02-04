@@ -10,6 +10,7 @@ export interface McpTextContent {
 export interface McpToolResult {
   content: McpTextContent[];
   isError?: boolean;
+  [key: string]: unknown;
 }
 
 export function mcpSuccess(text: string): McpToolResult {
