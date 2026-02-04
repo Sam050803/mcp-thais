@@ -9,6 +9,11 @@ import {
   listRoomTypesDescription, handleListRoomTypes,
   getRoomDetailsSchema, getRoomDetailsDescription, handleGetRoomDetails,
   createReservationSchema, createReservationDescription, handleCreateReservation,
+  searchClientsSchema, searchClientsDescription, handleSearchClients,
+  createRestaurantSaleSchema, createRestaurantSaleDescription, handleCreateRestaurantSale,
+  createServiceRequestSchema, createServiceRequestDescription, handleCreateServiceRequest,
+  getHousekeepingStatusSchema, getHousekeepingStatusDescription, handleGetHousekeepingStatus,
+  getSalesReportSchema, getSalesReportDescription, handleGetSalesReport
 } from './tools/index.js';
 
 const logger = new Logger('McpServer');
@@ -73,6 +78,71 @@ export function createMcpServer(): McpServer {
     }
   );
 
-  logger.success('4 tools MCP enregistrés');
+  // Tool 5: Search Clients
+  server.registerTool(
+    'thais_search_clients',
+    {
+      description: searchClientsDescription,
+      inputSchema: searchClientsSchema.shape,
+    },
+    async (params) => {
+      logger.info('Tool: thais_search_clients', params);
+      return handleSearchClients(params as any);
+    }
+  );
+
+  // Tool 6: Create Restaurant Sale
+  server.registerTool(
+    'thais_create_restaurant_sale',
+    {
+      description: createRestaurantSaleDescription,
+      inputSchema: createRestaurantSaleSchema.shape,
+    },
+    async (params) => {
+      logger.info('Tool: thais_create_restaurant_sale', params);
+      return handleCreateRestaurantSale(params as any);
+    }
+  );
+
+  // Tool 7: Create Service Request  
+  server.registerTool(
+    'thais_create_service_request',
+    {
+      description: createServiceRequestDescription,
+      inputSchema: createServiceRequestSchema.shape,
+    },
+    async (params) => {
+      logger.info('Tool: thais_create_service_request', params);
+      return handleCreateServiceRequest(params as any);
+    }
+  );
+
+  // Tool 8: Get Housekeeping Status
+  server.registerTool(
+    'thais_get_housekeeping_status',
+    {
+      description: getHousekeepingStatusDescription,
+      inputSchema: getHousekeepingStatusSchema.shape,
+    },
+    async (params) => {
+      logger.info('Tool: thais_get_housekeeping_status', params);
+      return handleGetHousekeepingStatus(params as any);
+    }
+  );
+
+  // Tool 9: Get Sales Report
+  server.registerTool(
+    'thais_get_sales_report',
+    {
+      description: getSalesReportDescription,
+      inputSchema: getSalesReportSchema.shape,
+    },
+    async (params) => {
+      logger.info('Tool: thais_get_sales_report', params);
+      return handleGetSalesReport(params as any);
+    }
+  );
+
+  logger.success('9 tools MCP enregistrés');
   return server;
 }
