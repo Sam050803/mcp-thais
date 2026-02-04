@@ -1,7 +1,7 @@
 {
   "name": "mcp-thais",
   "version": "1.0.0",
-  "description": "MCP Server professionnel pour l'API Thaïs",
+  "description": "MCP Server pour l'API Thaïs - Transport HTTP",
   "main": "build/index.js",
   "type": "module",
   "bin": {
@@ -18,19 +18,42 @@
     "test": "vitest run",
     "test:api": "tsx tests/integration/thais-client.test.ts",
     "test:dates": "tsx tests/unit/date-parser.test.ts",
+    "docker:build": "docker build -f deployment/Dockerfile -t mcp-thais:latest .",
+    "docker:run": "docker run -d -p 3000:3000 --env-file .env.production mcp-thais:latest",
+    "deploy:staging": "./scripts/deploy.sh staging",
+    "deploy:production": "./scripts/deploy.sh production",
+    "health-check": "./scripts/health-check.sh",
+    "monitor": "./scripts/monitor.sh",
+    "logs": "./scripts/monitor.sh logs",
     "lint": "tsc --noEmit",
     "clean": "rm -rf build"
   },
-  "keywords": ["mcp", "thais", "hotel", "booking", "ai", "chatbot", "xeko"],
+  "keywords": [
+    "mcp",
+    "thais",
+    "hotel",
+    "booking",
+    "reservation",
+    "management",
+    "production",
+    "docker",
+    "api",
+    "ai",
+    "chatbot",
+    "xeko"
+  ],
   "author": "Seyyid-Aassuf MAMADOU",
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.3",
+    "@types/cors": "^2.8.19",
     "axios": "^1.13.4",
-    "dotenv": "^17.2.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^25.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
