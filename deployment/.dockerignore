@@ -1,0 +1,62 @@
+# Fichiers et dossiers de production à ignorer
+node_modules/
+build/
+dist/
+logs/
+backups/
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.log
+*.pid
+
+# Secrets et configuration
+.env
+.env.local
+.env.production
+.env.staging
+
+# SSL certificates
+ssl/
+*.pem
+*.key
+*.crt
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation de développement
+docs/dev/
+DEVELOPMENT.md
+TODO.md
+
+# Tests
+tests/
+coverage/
+*.test.js
+*.spec.js
+
+# Build artifacts
+*.tgz
+*.tar.gz
+
+# Cache
+.cache/
+.npm/
+.yarn/
