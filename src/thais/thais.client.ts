@@ -14,7 +14,7 @@ import { SimpleCache } from '../utils/cache.js';
 import { Logger } from '../utils/logger.js';
 import type {
     LoginResponse, RoomType, Room, Availability, AvailabilityRaw,
-    EReservation, CreateEReservationRequest
+    EReservation, CreateEReservationRequest, PriceData
 } from './thais.types.js';
 import { th } from 'zod/locales';
 
@@ -218,6 +218,24 @@ export class ThaisClient {
         }
         
         return result;
+    }
+
+    async getPrices(params: {
+        checkIn: string;
+        checkOut: string;
+        roomTypeIds?: number[];
+    }): Promise<PriceData[]> {
+        const queryParams: any = {
+            from: params.checkIn,
+            to: params.checkOut,
+        };
+
+        // Ajouter les room_type_id[] si spécifiés
+        if (params.roomTypeIds && params.roomTypeIds.length > 0) {
+            queryParams['room_type_id[]'] = params.roomTypeIds;
+        }
+
+        return this.get<PriceData[]>('/api/partner/hotel/apr/prices/currents', queryParams, true);
     }
 
     async createEReservation(data: CreateEReservationRequest): Promise<EReservation> {

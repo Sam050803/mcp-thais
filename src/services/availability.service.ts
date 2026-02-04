@@ -5,7 +5,7 @@
 import { thaisClient } from "../thais/thais.client.js";
 import { validator } from "../utils/validator.js";
 import { Logger } from "../utils/logger.js";
-import type { Availability } from "../thais/thais.types.js";
+import type { Availability, PriceData } from "../thais/thais.types.js";
 import type { FormattedAvailability, NormalizedAvailabilityParams } from "../types/common.types.js";
 
 export class AvailabilityService {
@@ -25,33 +25,70 @@ export class AvailabilityService {
 
         this.logger.info(`Recherche : ${normalized.checkIn} -> ${normalized.checkOut}`);
 
-        const rawData = await thaisClient.getAvailability({
-            checkIn: normalized.checkIn,
-            checkOut: normalized.checkOut,
-            adults: normalized.adults,
-            children: normalized.children,
-        });
+        // Récupérer disponibilités et tarifs en parallèle
+        const [rawData, priceData] = await Promise.all([
+            thaisClient.getAvailability({
+                checkIn: normalized.checkIn,
+                checkOut: normalized.checkOut,
+                adults: normalized.adults,
+                children: normalized.children,
+            }),
+            thaisClient.getPrices({
+                checkIn: normalized.checkIn,
+                checkOut: normalized.checkOut,
+            })
+        ]);
 
-        const availabilities = this.formatAvailabilities(rawData, normalized.nbNights);
+        const availabilities = this.formatAvailabilities(rawData, priceData, normalized.nbNights);
         this.logger.success(`${availabilities.length} chambre(s) trouvée(s)`);
 
         return { normalized, availabilities, rawData };
     }
 
-    private formatAvailabilities(availabilities: Availability[], nbNights: number): FormattedAvailability[] {
+    private formatAvailabilities(availabilities: Availability[], priceData: PriceData[], nbNights: number): FormattedAvailability[] {
+        // Créer un map des prix par room_type_id et date
+        const priceMap = new Map<string, number>();
+        const rateMap = new Map<number, string>();
+        
+        for (const price of priceData) {
+            const key = `${price.room_type_id}_${price.date}`;
+            priceMap.set(key, price.price);
+            if (price.rate?.label) {
+                rateMap.set(price.room_type_id, price.rate.label);
+            }
+        }
+
         return availabilities
             .filter(avail => avail.room_type) // Seulement ceux avec room_type
-            .map((avail) => ({
-                roomTypeName: avail.room_type?.label || `Type #${avail.room_type_id}`,
-                roomTypeId: avail.room_type_id,
-                capacity: `${avail.room_type?.nb_persons_min || 1}-${avail.room_type?.nb_persons_max || 2} pers.`,
-                totalPrice: 0, // Prix non disponible via cet endpoint
-                pricePerNight: 0,
-                rateName: 'Tarif sur demande',
-                rateId: 0,
-                availableRooms: avail.availableRooms,
-                description: this.cleanHtml(avail.room_type?.description || ''),
-            }));
+            .map((avail) => {
+                // Calculer le prix total pour la période
+                let totalPrice = 0;
+                let pricesFound = 0;
+                
+                for (const date of avail.dates) {
+                    const key = `${avail.room_type_id}_${date}`;
+                    const dayPrice = priceMap.get(key);
+                    if (dayPrice) {
+                        totalPrice += dayPrice;
+                        pricesFound++;
+                    }
+                }
+
+                const pricePerNight = pricesFound > 0 ? totalPrice / pricesFound : 0;
+                const rateName = rateMap.get(avail.room_type_id) || 'Tarif standard';
+
+                return {
+                    roomTypeName: avail.room_type?.label || `Type #${avail.room_type_id}`,
+                    roomTypeId: avail.room_type_id,
+                    capacity: `${avail.room_type?.nb_persons_min || 1}-${avail.room_type?.nb_persons_max || 2} pers.`,
+                    totalPrice: Math.round(totalPrice * 100) / 100,
+                    pricePerNight: Math.round(pricePerNight * 100) / 100,
+                    rateName,
+                    rateId: 0,
+                    availableRooms: avail.availableRooms,
+                    description: this.cleanHtml(avail.room_type?.description || ''),
+                };
+            });
     }
 
     formatResponse(
@@ -86,6 +123,13 @@ export class AvailabilityService {
             msg += `### ${idx + 1}. ${room.roomTypeName}\n`;
             msg += `- **ID** : ${room.roomTypeId}\n`;
             msg += `- **Capacité** : ${room.capacity}\n`;
+            if (room.totalPrice > 0) {
+                msg += `- **Prix total** : ${room.totalPrice}€ (${params.nbNights} nuit${params.nbNights > 1 ? 's' : ''})\n`;
+                msg += `- **Prix par nuit** : ${room.pricePerNight}€\n`;
+                msg += `- **Tarif** : ${room.rateName}\n`;
+            } else {
+                msg += `- **Prix** : Sur demande\n`;
+            }
             if (room.availableRooms) {
                 msg += `- **Chambres disponibles** : ${room.availableRooms}\n`;
             }

@@ -1,4 +1,8 @@
-import { ThaisClient } from '../thais/thais.client.js';
+/**
+ * Service de génération de rapports analytiques
+ */
+
+import { thaisClient } from '../thais/thais.client.js';
 import { Logger } from '../utils/logger.js';
 
 export interface GetSalesReportParams {
@@ -11,11 +15,9 @@ export interface GetSalesReportParams {
 }
 
 export class AnalyticsService {
-    private thaisClient: ThaisClient;
     private logger: Logger;
 
     constructor() {
-        this.thaisClient = new ThaisClient();
         this.logger = new Logger('AnalyticsService');
     }
 

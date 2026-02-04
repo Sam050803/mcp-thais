@@ -20,14 +20,17 @@ export type CheckAvailabilityParams = z.infer<typeof checkAvailabilitySchema>;
 
 export const checkAvailabilityDescription = `Vérifie la disponibilité des chambres d'hôtel pour une période donnée.
 
-🎯 **Quand utiliser** :
-- "Y a-t-il une chambre disponible du 6 au 12 février ?"
+🎯 **Question test principale** :
+- "Y a t-il une chambre disponible pour 2 personnes du 6 au 12 février ?"
+
+🔍 **Autres exemples** :
 - "Disponibilités pour 2 personnes début mars ?"
 - "Chambres libres pour demain ?"
+- "Du 15 au 20 juin, chambre pour 4"
 
 📅 **Formats de dates** : YYYY-MM-DD, "6 février", "début/mi/fin mars", "demain", "dans 3 jours"
 
-📊 **Retourne** : Liste des chambres avec tarifs`;
+📊 **Retourne** : Liste des chambres avec tarifs complets`;
 
 export async function handleCheckAvailability(
     params: CheckAvailabilityParams

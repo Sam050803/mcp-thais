@@ -204,3 +204,26 @@ export interface SalesDataQuery {
   end_date: string;
   include_categories?: boolean;
 }
+
+// Prix par nuit (endpoint /apr/prices/currents)
+export interface PriceData {
+  id: number;
+  created_at: string;
+  date: string;
+  room_type_id: number;
+  rate_id: number;
+  price: number;
+  children_price?: number;
+  infants_price?: number;
+  min_stay: number;
+  max_stay?: number;
+  coa: boolean;  // close on arrival
+  cod: boolean;  // close on departure
+  source: string;
+  user: string;
+  ack_at?: string;
+  stop_sell: boolean;
+  archived: boolean;
+  room_type?: RoomType;
+  rate?: Rate;
+}

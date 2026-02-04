@@ -2,30 +2,21 @@
 
 /**
  * Point d'entrée du serveur MCP Thaïs
- * Supporte deux modes :
- *   - HTTP Streamable (par défaut) : pour ChatGPT via ngrok
- *   - stdio (--stdio) : pour Claude Desktop (plus rapide, sans proxy)
+ * Mode HTTP Streamable pour Claude Desktop via mcp-remote
  */
 
 import crypto from 'node:crypto';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createMcpServer } from './mcp/server.js';
 import { thaisClient } from './thais/thais.client.js';
-
-// Détecter le mode stdio
-const isStdioMode = process.argv.includes('--stdio');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Logs (désactivés en mode stdio car stdout est réservé au protocole)
 const log = (msg: string) => {
-    if (!isStdioMode) {
-        console.log(`[${new Date().toISOString()}] ${msg}`);
-    }
+    console.log(`[${new Date().toISOString()}] ${msg}`);
 };
 
 // Configuration CORS
@@ -252,45 +243,5 @@ process.on('SIGTERM', () => {
     process.exit(0);
 });
 
-// ============================================
-// MODE STDIO (pour Claude Desktop natif)
-// ============================================
-async function startStdioServer() {
-    try {
-        // En mode stdio, on ne peut pas logger sur stdout (réservé au protocole)
-        // On log sur stderr à la place
-        const logStdio = (msg: string) => process.stderr.write(`[MCP] ${msg}\n`);
-        
-        logStdio('🚀 Démarrage en mode stdio...');
-        
-        // Test connexion API
-        const isConnected = await thaisClient.testConnection();
-        if (!isConnected) {
-            logStdio('⚠️ API Thaïs non disponible');
-        } else {
-            logStdio('✅ API Thaïs connectée');
-        }
-        
-        // Créer le transport stdio
-        const transport = new StdioServerTransport();
-        const server = createMcpServer();
-        
-        logStdio('📡 Connexion au client MCP...');
-        await server.connect(transport);
-        
-        logStdio('✅ Serveur MCP prêt');
-        
-    } catch (error: any) {
-        process.stderr.write(`❌ Erreur: ${error.message}\n`);
-        process.exit(1);
-    }
-}
-
-// ============================================
-// POINT D'ENTRÉE
-// ============================================
-if (isStdioMode) {
-    startStdioServer();
-} else {
-    startServer();
-}
+// Démarrage du serveur
+startServer();

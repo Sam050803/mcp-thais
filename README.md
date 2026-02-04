@@ -246,11 +246,19 @@ require('./build/mcp/tools/index.js').tools.forEach(t =>
 
 Voir [docs/SCENARIOS_TEST.md](docs/SCENARIOS_TEST.md) pour tests détaillés.
 
-## 📚 Documentation
+## 📚 Ressources & Documentation Complète
 
-- **API Thaïs** : https://demo.thais-hotel.com/hub/doc/index.html
-- **MCP Protocol** : https://modelcontextprotocol.io/
-- **Collection Postman** : `docs/thais-postman-collection.json`
+### **Ressources Officielles Thaïs :**
+- 📖 **[API Documentation](https://demo.thais-hotel.com/hub/doc/index.html)** - Documentation complète API
+- 📦 **[Collection Postman](https://demo.thais-hotel.com/hub/doc/thais-postman-collection.json)** - Tests et exemples
+- 🔑 **Identifiants test** : `thaisAPI` / `thaisAPI2024`
+- 🌐 **[Site MCP](https://modelcontextprotocol.io/)** - Référence protocol
+
+### **Documentation Projet :**
+- 🏗️ **[Structure](docs/PROJECT_STRUCTURE.md)** - Architecture détaillée
+- 🧪 **[Scénarios Tests](docs/SCENARIOS_TEST.md)** - Cas d'usage complets  
+- 🎯 **[Question Test Officielle](docs/TEST_QUESTION_OFFICIELLE.md)** - Validation cahier des charges
+- 🌐 **[Support ChatGPT](docs/CHATGPT_NGROK.md)** - Configuration ngrok
 
 ## 🛠️ Stack Technique
 
