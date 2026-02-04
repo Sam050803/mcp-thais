@@ -257,8 +257,7 @@ Voir [docs/SCENARIOS_TEST.md](docs/SCENARIOS_TEST.md) pour tests détaillés.
 ### **Documentation Projet :**
 - 🏗️ **[Structure](docs/PROJECT_STRUCTURE.md)** - Architecture détaillée
 - 🧪 **[Scénarios Tests](docs/SCENARIOS_TEST.md)** - Cas d'usage complets  
-- 🎯 **[Question Test Officielle](docs/TEST_QUESTION_OFFICIELLE.md)** - Validation cahier des charges
-- 🌐 **[Support ChatGPT](docs/CHATGPT_NGROK.md)** - Configuration ngrok
+-  **[Support ChatGPT](docs/CHATGPT_NGROK.md)** - Configuration ngrok
 
 ## 🛠️ Stack Technique
 

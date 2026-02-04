@@ -1,37 +1,38 @@
-# 🌐 Support ChatGPT avec Ngrok
+# Support ChatGPT via Ngrok
 
-## 🎯 **Configuration ChatGPT via Ngrok**
+## Configuration Alternative
 
-Votre serveur MCP Thaïs peut aussi fonctionner avec **ChatGPT** en utilisant **ngrok** pour exposer le serveur local.
+Le serveur MCP peut également être utilisé avec ChatGPT en exposant l'endpoint local via ngrok.
 
-### **Étape 1 : Installation Ngrok**
+### Installation et Configuration
+
+**1. Installation Ngrok**
 ```bash
 # MacOS
 brew install ngrok
 
-# Ou télécharger depuis https://ngrok.com/download
+# Ou téléchargement direct : https://ngrok.com/download
 ```
 
-### **Étape 2 : Démarrer le serveur MCP**
+**2. Démarrage du serveur**
 ```bash
 npm start
-# Serveur sur http://localhost:3000/mcp
+# Serveur disponible sur http://localhost:3000/mcp
 ```
 
-### **Étape 3 : Exposer avec Ngrok**
+**3. Exposition via Ngrok**
 ```bash
 ngrok http 3000
 ```
 
-Ngrok affichera une URL publique :
+Ngrok fournit une URL publique :
 ```
 Forwarding: https://abc123.ngrok.io -> http://localhost:3000
 ```
 
-### **Étape 4 : Configuration ChatGPT**
+**4. Configuration ChatGPT Actions**
 
-1. **Aller dans ChatGPT → Actions**
-2. **Créer une nouvelle action** avec ce schema :
+Création d'une action ChatGPT avec le schéma OpenAPI :
 
 ```json
 {
@@ -92,25 +93,26 @@ Forwarding: https://abc123.ngrok.io -> http://localhost:3000
 }
 ```
 
-### **Étape 5 : Test ChatGPT**
+**5. Test de fonctionnement**
 
-Dans ChatGPT, posez la question :
-> *"Y a t-il une chambre disponible pour 2 personnes du 6 au 12 février ?"*
+Exemple de requête :
+```
+"Y a t-il une chambre disponible pour 2 personnes du 6 au 12 février ?"
+```
 
-ChatGPT utilisera automatiquement votre API MCP via ngrok ! 🎉
+ChatGPT utilise automatiquement l'API MCP via ngrok.
 
-### **Avantages Ngrok :**
-- ✅ **Universel** : Fonctionne avec n'importe quel service externe
-- ✅ **Simplicité** : Une commande pour exposer le serveur
-- ✅ **Sécurité** : Tunnel HTTPS automatique  
-- ✅ **Debug** : Interface web ngrok pour voir les requêtes
-
-### **Comparaison des modes :**
+## Comparaison des modes de déploiement
 
 | Mode | Avantages | Inconvénients |
 |------|-----------|---------------|
 | **Claude Desktop** | Direct, rapide | Claude uniquement |
-| **Ngrok + ChatGPT** | Universel, cloud | Setup plus complexe |
-| **HTTP Local** | Simple dev | Local uniquement |
+| **Ngrok + ChatGPT** | Universel, cloud | Configuration requise |
+| **HTTP Local** | Développement simple | Local uniquement |
 
-**Votre serveur supporte les 3 modes ! 🚀**
+## Avantages techniques
+
+- Tunnel HTTPS automatique
+- Interface debug ngrok
+- Compatible tout service externe
+- Une commande pour exposer
