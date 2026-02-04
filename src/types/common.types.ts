@@ -37,6 +37,8 @@ export interface FormattedAvailability {
   totalPrice: number;
   pricePerNight: number;
   rateName: string;
+  rateId: number;
+  availableRooms?: number;
   description?: string;
 }
 

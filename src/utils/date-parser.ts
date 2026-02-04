@@ -143,6 +143,25 @@ export class DateParser {
         const date = new Date(dateStr);
         return date instanceof Date && !isNaN(date.getTime());
     }
+
+    getYesterday(): string {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        return yesterday.toISOString().split('T')[0];
+    }
+
+    formatFrench(dateStr: string): string {
+        if (!dateStr) return '';
+        
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return dateStr;
+        
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        
+        return `${day}/${month}/${year}`;
+    }
 }
 
 export const dateParser = new DateParser();

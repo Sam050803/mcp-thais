@@ -22,7 +22,15 @@ export class RoomService {
 
     async getRoomDetails(roomTypeId: number): Promise<RoomType> {
         this.logger.info(`Récupération chambre #${roomTypeId}...`);
-        const roomType = await thaisClient.getRoomType(roomTypeId);
+        // L'API n'a pas d'endpoint pour un room-type individuel,
+        // on filtre depuis la liste
+        const roomTypes = await thaisClient.getRoomTypes();
+        const roomType = roomTypes.find(rt => rt.id === roomTypeId);
+        
+        if (!roomType) {
+            throw new Error(`Type de chambre #${roomTypeId} non trouvé`);
+        }
+        
         this.logger.success(`Chambre "${roomType.label}" récupérée`);
         return roomType;
     }

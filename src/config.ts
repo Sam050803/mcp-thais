@@ -1,13 +1,58 @@
 /**
 * Configuration centralisée de l'application.
-* - Charge les variables d'environnement
+* - Charge les variables d'environnement en mode silencieux
 * - Fournit une interface typée pour accéder aux paramètres de configuration
 * - Facile à modifier
 */
 
-import dotenv from 'dotenv';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-dotenv.config();
+// Charger .env manuellement (silencieux, pas de logs)
+function loadEnvFile(): void {
+    try {
+        // Trouver le répertoire racine du projet
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = dirname(__filename);
+        const envPath = resolve(__dirname, '..', '.env');
+        
+        if (!existsSync(envPath)) {
+            return; // Pas de .env, utiliser les variables d'environnement système
+        }
+        
+        const content = readFileSync(envPath, 'utf-8');
+        const lines = content.split('\n');
+        
+        for (const line of lines) {
+            const trimmed = line.trim();
+            // Ignorer les commentaires et lignes vides
+            if (!trimmed || trimmed.startsWith('#')) continue;
+            
+            const eqIndex = trimmed.indexOf('=');
+            if (eqIndex === -1) continue;
+            
+            const key = trimmed.substring(0, eqIndex).trim();
+            let value = trimmed.substring(eqIndex + 1).trim();
+            
+            // Supprimer les guillemets si présents
+            if ((value.startsWith('"') && value.endsWith('"')) ||
+                (value.startsWith("'") && value.endsWith("'"))) {
+                value = value.slice(1, -1);
+            }
+            
+            // Ne pas écraser les variables existantes
+            if (process.env[key] === undefined) {
+                process.env[key] = value;
+            }
+        }
+    } catch {
+        // Silencieux en cas d'erreur
+    }
+}
+
+// Charger les variables d'environnement
+loadEnvFile();
 
 interface AppConfig {
     thais: {
@@ -15,6 +60,11 @@ interface AppConfig {
         username: string;
         password: string;
         timeout: number;
+    };
+    mcp: {
+        name: string;
+        version: string;
+        port: number;
     };
     cache: {
         ttl: number;
@@ -55,16 +105,14 @@ export const config: AppConfig = {
     password: requireEnv('THAIS_PASSWORD'),
     timeout: getEnvNumber('API_TIMEOUT', 15000),
   },
+  mcp: {
+    name: 'mcp-thais',
+    version: '1.0.0',
+    port: getEnvNumber('PORT', 3000),
+  },
   cache: {
     ttl: getEnvNumber('CACHE_TTL', 300) * 1000,
     enabled: getEnvBoolean('CACHE_ENABLED', true),
   },
   debug: getEnvBoolean('DEBUG', false),
 };
-
-export function logConfig(): void {
-  console.error('📋 Configuration chargée :');
-  console.error(`   • API URL    : ${config.thais.baseUrl}`);
-  console.error(`   • Username   : ${config.thais.username}`);
-  console.error(`   • Debug mode : ${config.debug}`);
-}
