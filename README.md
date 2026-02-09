@@ -81,7 +81,7 @@ npm start       # Mode stdio
   "mcpServers": {
     "thais": {
       "command": "node", 
-      "args": ["/Users/vous/mcp-thais/build/index.js", "--stdio"]
+      "args": ["/path/to/mcp-thais/build/index.js", "--stdio"]
     }
   }
 }
@@ -119,8 +119,8 @@ ngrok http 3000
 
 ### Workflow Complet Réservation :
 ```
-1. "Quelles chambres avez-vous ?" 
-   → Liste complète avec tarifs
+1. "Quelles chambres sont disponibles ?" 
+  → Liste complète avec tarifs
 
 2. "Disponibilités du 6 au 12 février pour couple + enfant"
    → Vérification intelligente
@@ -270,18 +270,3 @@ Voir [docs/SCENARIOS_TEST.md](docs/SCENARIOS_TEST.md) pour tests détaillés.
 - **Logs** : Custom logger coloré
 
 ---
-
-## ⚠️ Note importante
-
-Les 9 outils ont été développés avec une structure cohérente suivant vos patterns originaux. **Je n'ai pas pu les tester en live** avec Claude Desktop, donc je vous recommande fortement de :
-
-1. **Tester chaque outil** avec les scénarios dans `SCENARIOS_TEST.md`
-2. **Vérifier les 9 outils** apparaissent dans Claude Desktop
-3. **Valider le parsing** des dates en français
-4. **Tester le workflow complet** de réservation
-
-Si vous trouvez des bugs, ils seront probablement mineurs (typos, formats) et facilement corrigeables.
-
----
-
-*Serveur MCP professionnel pour gestion hôtelière complète - Prêt pour entretien technique* ✅
