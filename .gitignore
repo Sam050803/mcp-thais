@@ -8,6 +8,7 @@ dist/
 # Environment
 .env
 .env.production
+# .env.production // Ignore production environment variables
 .env.local
 
 # IDE
