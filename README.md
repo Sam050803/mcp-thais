@@ -31,6 +31,40 @@ Voir [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) pour la structure co
 
 ```
 src/
+````markdown
+# 🏨 MCP Thaïs Hotel Management Server
+
+Un serveur MCP (Model Context Protocol) complet qui connecte l'API Thaïs de gestion hôtelière à Claude Desktop avec 9 outils professionnels.
+
+## ✨ Fonctionnalités Complètes
+
+### 🎯 **Outils Core** (4 outils) ✅
+- **Vérification disponibilité** : `thais_check_availability` avec parsing intelligent des dates
+- **Liste des chambres** : `thais_list_room_types` avec descriptions complètes  
+- **Détails chambres** : `thais_get_room_details` avec équipements et tarifs
+- **Réservations** : `thais_create_e_reservation` avec validation et confirmation
+
+### 🚀 **Outils Avancés** (5 outils) ✅
+- **CRM Clients** : `search_clients` - Recherche clientèle avec fidélité
+- **Ventes Restaurant** : `create_restaurant_sale` - Facturation sur chambres
+- **Demandes Service** : `create_service_request` - Tickets avec priorisation
+- **Suivi Ménage** : `get_housekeeping_status` - États temps réel
+- **Analytics** : `get_sales_report` - Rapports avec prédictions
+
+### 🎨 **Caractéristiques Techniques** 🌟
+- **Parsing dates intelligent** : "6 février", "demain", "début mars"
+- **Support multi-formats** : stdio (Claude natif) + HTTP (universel)
+- **Cache performant** : Réduction 80% des appels API répétitifs
+- **Validation robuste** : Email, téléphone, dates avec messages clairs
+- **Logs professionnels** : Système coloré avec niveaux debug
+- **Architecture modulaire** : Services métier séparés, réutilisables
+
+## 🏗️ Architecture Technique
+
+Voir [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) pour la structure complète.
+
+```
+src/
 ├── mcp/
 │   ├── server.ts          # Serveur MCP principal
 │   └── tools/             # 9 Outils MCP
@@ -181,10 +215,10 @@ npm run dev
 # Test direct des outils  
 echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | node build/index.js --stdio
 
-# Vérifier une réservation via API
+# Vérifier une réservation via API (utiliser des identifiants valides ou un token)
 TOKEN=$(curl -s -X POST https://demo.thais-hotel.com/hub/api/partner/login \
   -H 'Content-Type: application/json' \
-  -d '{"username":"thaisAPI","password":"thaisAPI2024"}' | jq -r .token)
+  -d '{"username":"REPLACE_THAIS_USERNAME","password":"REPLACE_THAIS_PASSWORD"}' | jq -r .token)
 
 curl -s "https://demo.thais-hotel.com/hub/api/partner/hotel/ebookings/97" \
   -H "Authorization: Bearer $TOKEN" | jq '.'
@@ -233,7 +267,8 @@ cat SCENARIOS_TEST.md
 node -e "
 require('./build/mcp/tools/index.js').tools.forEach(t => 
   console.log('✅', t.name)
-)"
+)
+"
 ```
 
 ### Checklist Entretien :
@@ -251,7 +286,7 @@ Voir [docs/SCENARIOS_TEST.md](docs/SCENARIOS_TEST.md) pour tests détaillés.
 ### **Ressources Officielles Thaïs :**
 - 📖 **[API Documentation](https://demo.thais-hotel.com/hub/doc/index.html)** - Documentation complète API
 - 📦 **[Collection Postman](https://demo.thais-hotel.com/hub/doc/thais-postman-collection.json)** - Tests et exemples
-- 🔑 **Identifiants test** : `thaisAPI` / `thaisAPI2024`
+- 🔑 **Identifiants test** : `REPLACE_THAIS_USERNAME` / `REPLACE_THAIS_PASSWORD`
 - 🌐 **[Site MCP](https://modelcontextprotocol.io/)** - Référence protocol
 
 ### **Documentation Projet :**
@@ -270,3 +305,4 @@ Voir [docs/SCENARIOS_TEST.md](docs/SCENARIOS_TEST.md) pour tests détaillés.
 - **Logs** : Custom logger coloré
 
 ---
+````
